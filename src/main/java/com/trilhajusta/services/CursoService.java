@@ -2,6 +2,8 @@ package com.trilhajusta.services;
 
 import com.trilhajusta.domain.entities.Curso;
 import com.trilhajusta.repositories.CursoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class CursoService {
         this.repo = repo;
     }
 
+    public Page<Curso> list(Pageable pageable) { return repo.findAll(pageable); }
     public List<Curso> byTrilha(Long trilhaId) { return repo.findByTrilha_Id(trilhaId); }
     public Curso save(Curso c) { return repo.save(c); }
     public void delete(Long id) { repo.deleteById(id); }
