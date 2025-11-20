@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@${ORACLE_HOST:localhost}:${ORACLE_PORT:1521}/${ORACLE_SERVICE:XE}
+    username: ${ORACLE_USER:trilhajusta}
+    password: ${ORACLE_PASSWORD:secret}
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+    open-in-view: false
+  messages:
+    basename: messages
+    encoding: UTF-8
+  cache:
+    type: caffeine
+  rabbitmq:
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:guest}
+    password: ${RABBIT_PASSWORD:guest}
+
+  # Spring AI (OpenAI)
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:replaceme}
+
+jwt:
+  secret: ${JWT_SECRET:devsecret-super-unsafe}
+  expiration: 86400000 # 1 day in ms
