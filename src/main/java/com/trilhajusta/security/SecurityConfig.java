@@ -31,21 +31,23 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable());
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-    http.authorizeHttpRequests(auth -> auth
-        .requestMatchers("/actuator/health").permitAll()
-        .requestMatchers("/api/v1/auth/**").permitAll()
-        // public GETs
-        .requestMatchers(HttpMethod.GET, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/vagas/**").permitAll()
-        // candidaturas: allow authenticated users to create
-        .requestMatchers(HttpMethod.POST, "/api/v1/candidaturas/**").hasAnyRole("USER","ADMIN")
-        // only admin can change candidatura status
-        .requestMatchers(HttpMethod.PATCH, "/api/v1/candidaturas/**").hasRole("ADMIN")
-        // admin-only writes for management endpoints
-        .requestMatchers(HttpMethod.POST, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/cursos/**", "/api/v1/vagas/**", "/api/v1/usuarios/**").hasRole("ADMIN")
-        .requestMatchers(HttpMethod.PUT, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/cursos/**", "/api/v1/vagas/**", "/api/v1/usuarios/**").hasRole("ADMIN")
-        .requestMatchers(HttpMethod.DELETE, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/cursos/**", "/api/v1/vagas/**", "/api/v1/usuarios/**").hasRole("ADMIN")
-        .anyRequest().authenticated()
-    );
+        http.authorizeHttpRequests(auth -> auth
+            .requestMatchers("/actuator/health").permitAll()
+            .requestMatchers("/api/v1/auth/**").permitAll()
+            // Swagger/OpenAPI (springdoc)
+            .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+            // public GETs
+            .requestMatchers(HttpMethod.GET, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/vagas/**").permitAll()
+            // candidaturas: allow authenticated users to create
+            .requestMatchers(HttpMethod.POST, "/api/v1/candidaturas/**").hasAnyRole("USER","ADMIN")
+            // only admin can change candidatura status
+            .requestMatchers(HttpMethod.PATCH, "/api/v1/candidaturas/**").hasRole("ADMIN")
+            // admin-only writes for management endpoints
+            .requestMatchers(HttpMethod.POST, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/cursos/**", "/api/v1/vagas/**", "/api/v1/usuarios/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/cursos/**", "/api/v1/vagas/**", "/api/v1/usuarios/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/competencias/**", "/api/v1/trilhas/**", "/api/v1/cursos/**", "/api/v1/vagas/**", "/api/v1/usuarios/**").hasRole("ADMIN")
+            .anyRequest().authenticated()
+        );
         http.authenticationProvider(daoAuthProvider());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
