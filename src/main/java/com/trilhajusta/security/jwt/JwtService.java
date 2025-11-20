@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import java.nio.charset.StandardCharsets;
-import io.jsonwebtoken.io.Decoders;
 
 @Service
 public class JwtService {
@@ -22,7 +21,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration-ms}")
     private long expiration;
 
     public String extractUsername(String token) {

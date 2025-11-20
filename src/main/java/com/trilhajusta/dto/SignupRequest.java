@@ -1,3 +1,13 @@
 package com.trilhajusta.dto;
 
-public record SignupRequest(String nome, String email, String senha, String cidade, String uf) {}
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record SignupRequest(
+        @NotBlank String nome,
+        @Email @NotBlank String email,
+        @NotBlank @Size(min = 6, max = 100) String senha,
+        @NotBlank String cidade,
+        @NotBlank String uf
+) {}

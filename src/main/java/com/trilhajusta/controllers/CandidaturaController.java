@@ -4,10 +4,11 @@ import com.trilhajusta.domain.entities.Candidatura;
 import com.trilhajusta.domain.enums.CandidaturaStatus;
 import com.trilhajusta.dto.AtualizarStatusRequest;
 import com.trilhajusta.services.CandidaturaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/candidaturas")
@@ -25,12 +26,12 @@ public class CandidaturaController {
     }
 
     @PatchMapping("/{id}/status")
-    public Candidatura atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusRequest req) {
+    public Candidatura atualizarStatus(@PathVariable Long id, @RequestBody @Valid AtualizarStatusRequest req) {
         return service.atualizarStatus(id, req.status());
     }
 
     @GetMapping
-    public List<Candidatura> list() { return service.list(); }
+    public Page<Candidatura> list(Pageable pageable) { return service.list(pageable); }
 
     @GetMapping("/{id}")
     public Candidatura get(@PathVariable Long id) { return service.get(id); }

@@ -32,4 +32,4 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET:devsecret-super-unsafe}
-  expiration: 86400000 # 1 day in ms
+  expiration-ms: 86400000 # 1 day in ms

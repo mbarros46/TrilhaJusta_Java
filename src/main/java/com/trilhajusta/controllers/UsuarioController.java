@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -28,7 +29,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario u) {
+    public ResponseEntity<Usuario> create(@RequestBody @Valid Usuario u) {
         return ResponseEntity.status(201).body(repo.save(u));
     }
 
@@ -36,7 +37,7 @@ public class UsuarioController {
     public Usuario get(@PathVariable Long id) { return repo.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado")); }
 
     @PutMapping("/{id}")
-    public Usuario update(@PathVariable Long id, @RequestBody Usuario u) { u.setId(id); return repo.save(u); }
+    public Usuario update(@PathVariable Long id, @RequestBody @Valid Usuario u) { u.setId(id); return repo.save(u); }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) { repo.deleteById(id); return ResponseEntity.noContent().build(); }

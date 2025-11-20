@@ -9,8 +9,12 @@ import com.trilhajusta.messaging.NovaCandidaturaPublisher;
 import com.trilhajusta.repositories.CandidaturaRepository;
 import com.trilhajusta.repositories.UsuarioRepository;
 import com.trilhajusta.repositories.VagaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CandidaturaService {
@@ -30,8 +34,10 @@ public class CandidaturaService {
 
     @Transactional
     public Candidatura criar(Long usuarioId, Long vagaId) {
-        Usuario u = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        Vaga v = vagaRepository.findById(vagaId).orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
+        Usuario u = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Vaga v = vagaRepository.findById(vagaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga não encontrada"));
         Candidatura c = new Candidatura();
         c.setUsuario(u);
         c.setVaga(v);
@@ -43,14 +49,18 @@ public class CandidaturaService {
 
     @Transactional
     public Candidatura atualizarStatus(Long id, CandidaturaStatus status) {
-        Candidatura c = repo.findById(id).orElseThrow(() -> new RuntimeException("Candidatura não encontrada"));
+        Candidatura c = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidatura não encontrada"));
         c.setStatus(status);
         return repo.save(c);
     }
 
     public void delete(Long id) { repo.deleteById(id); }
 
-    public Candidatura get(Long id) { return repo.findById(id).orElseThrow(() -> new RuntimeException("Candidatura não encontrada")); }
+    public Candidatura get(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidatura não encontrada"));
+    }
 
-    public java.util.List<Candidatura> list() { return repo.findAll(); }
+    public Page<Candidatura> list(Pageable pageable) { return repo.findAll(pageable); }
 }

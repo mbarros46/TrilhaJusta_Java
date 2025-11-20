@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -27,13 +28,13 @@ public class TrilhaController {
     public Page<Trilha> list(Pageable pageable) { return trilhaService.list(pageable); }
 
     @PostMapping
-    public ResponseEntity<Trilha> create(@RequestBody Trilha t) { return ResponseEntity.status(201).body(trilhaService.save(t)); }
+    public ResponseEntity<Trilha> create(@RequestBody @Valid Trilha t) { return ResponseEntity.status(201).body(trilhaService.save(t)); }
 
     @GetMapping("/{id}")
     public Trilha get(@PathVariable Long id) { return trilhaService.get(id); }
 
     @PutMapping("/{id}")
-    public Trilha update(@PathVariable Long id, @RequestBody Trilha t) { t.setId(id); return trilhaService.save(t); }
+    public Trilha update(@PathVariable Long id, @RequestBody @Valid Trilha t) { t.setId(id); return trilhaService.save(t); }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) { trilhaService.delete(id); return ResponseEntity.noContent().build(); }
