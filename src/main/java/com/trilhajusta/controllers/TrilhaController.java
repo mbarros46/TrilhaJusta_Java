@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/trilhas")
@@ -28,7 +29,10 @@ public class TrilhaController {
     public Page<Trilha> list(Pageable pageable) { return trilhaService.list(pageable); }
 
     @PostMapping
-    public ResponseEntity<Trilha> create(@RequestBody @Valid Trilha t) { return ResponseEntity.status(201).body(trilhaService.save(t)); }
+    public ResponseEntity<Trilha> create(@RequestBody @Valid Trilha t) {
+        Trilha saved = trilhaService.save(t);
+        return ResponseEntity.created(URI.create("/api/v1/trilhas/" + saved.getId())).body(saved);
+    }
 
     @GetMapping("/{id}")
     public Trilha get(@PathVariable Long id) { return trilhaService.get(id); }

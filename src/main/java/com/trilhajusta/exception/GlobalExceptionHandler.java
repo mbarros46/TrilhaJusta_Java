@@ -2,12 +2,15 @@ package com.trilhajusta.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
@@ -23,20 +26,38 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest req) {
+        var locale = LocaleContextHolder.getLocale();
         List<String> details = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(FieldError::getDefaultMessage)
+                .map(err -> messageSource.getMessage(err, locale))
                 .toList();
-        ApiError err = new ApiError(Instant.now(), req.getRequestURI(), "VALIDATION_ERROR",
-                "Validation failed", details);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+        String title = messageSource.getMessage("error.validation.title", null, "Validation failed", locale);
+        ApiError body = new ApiError(Instant.now(), req.getRequestURI(), "VALIDATION_ERROR", title, details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ApiError> handleResponseStatus(ResponseStatusException ex, HttpServletRequest req) {
+        var locale = LocaleContextHolder.getLocale();
+        String title = messageSource.getMessage("error.generic.title", null, ex.getStatusCode().toString(), locale);
+        ApiError body = new ApiError(Instant.now(), req.getRequestURI(), ex.getStatusCode().toString(), ex.getReason(), List.of());
+        return ResponseEntity.status(ex.getStatusCode()).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest req) {
+        var locale = LocaleContextHolder.getLocale();
+        String title = messageSource.getMessage("error.data.integrity.title", null, "Data integrity violation", locale);
+        ApiError body = new ApiError(Instant.now(), req.getRequestURI(), "DATA_INTEGRITY_VIOLATION", title, List.of());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntime(RuntimeException ex, HttpServletRequest req) {
-        ApiError err = new ApiError(Instant.now(), req.getRequestURI(), "GENERIC_ERROR",
-                ex.getMessage(), List.of());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+        var locale = LocaleContextHolder.getLocale();
+        String title = messageSource.getMessage("error.generic.title", null, "Error", locale);
+        ApiError body = new ApiError(Instant.now(), req.getRequestURI(), "GENERIC_ERROR", title + ": " + ex.getMessage(), List.of());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/candidaturas")
@@ -22,7 +23,8 @@ public class CandidaturaController {
 
     @PostMapping
     public ResponseEntity<Candidatura> criar(@RequestParam Long usuarioId, @RequestParam Long vagaId) {
-        return ResponseEntity.status(201).body(service.criar(usuarioId, vagaId));
+        Candidatura saved = service.criar(usuarioId, vagaId);
+        return ResponseEntity.created(URI.create("/api/v1/candidaturas/" + saved.getId())).body(saved);
     }
 
     @PatchMapping("/{id}/status")

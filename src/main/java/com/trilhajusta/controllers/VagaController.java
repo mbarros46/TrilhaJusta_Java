@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/vagas")
@@ -28,13 +30,16 @@ public class VagaController {
     }
 
     @PostMapping
-    public ResponseEntity<Vaga> create(@RequestBody Vaga v) { return ResponseEntity.status(201).body(service.save(v)); }
+    public ResponseEntity<Vaga> create(@RequestBody @Valid Vaga v) {
+        Vaga saved = service.save(v);
+        return ResponseEntity.created(URI.create("/api/v1/vagas/" + saved.getId())).body(saved);
+    }
 
     @GetMapping("/{id}")
     public Vaga get(@PathVariable Long id) { return service.get(id); }
 
     @PutMapping("/{id}")
-    public Vaga update(@PathVariable Long id, @RequestBody Vaga v) { v.setId(id); return service.save(v); }
+    public Vaga update(@PathVariable Long id, @RequestBody @Valid Vaga v) { v.setId(id); return service.save(v); }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) { service.delete(id); return ResponseEntity.noContent().build(); }

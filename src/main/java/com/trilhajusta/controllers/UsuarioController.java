@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -30,7 +31,8 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> create(@RequestBody @Valid Usuario u) {
-        return ResponseEntity.status(201).body(repo.save(u));
+        Usuario saved = repo.save(u);
+        return ResponseEntity.created(URI.create("/api/v1/usuarios/" + saved.getId())).body(saved);
     }
 
     @GetMapping("/{id}")

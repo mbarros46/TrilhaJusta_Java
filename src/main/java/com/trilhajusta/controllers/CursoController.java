@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/cursos")
@@ -22,7 +23,10 @@ public class CursoController {
     public Page<Curso> list(Pageable pageable) { return service.list(pageable); }
 
     @PostMapping
-    public ResponseEntity<Curso> create(@RequestBody @Valid Curso c) { return ResponseEntity.status(201).body(service.save(c)); }
+    public ResponseEntity<Curso> create(@RequestBody @Valid Curso c) {
+        Curso saved = service.save(c);
+        return ResponseEntity.created(URI.create("/api/v1/cursos/" + saved.getId())).body(saved);
+    }
 
     @GetMapping("/{id}")
     public Curso get(@PathVariable Long id) { return service.get(id); }

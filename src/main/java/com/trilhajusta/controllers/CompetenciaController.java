@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/competencias")
@@ -21,15 +23,16 @@ public class CompetenciaController {
     public Page<Competencia> list(Pageable pageable) { return service.list(pageable); }
 
     @PostMapping
-    public ResponseEntity<Competencia> create(@RequestBody Competencia c) {
-        return ResponseEntity.status(201).body(service.save(c));
+    public ResponseEntity<Competencia> create(@RequestBody @Valid Competencia c) {
+        Competencia saved = service.save(c);
+        return ResponseEntity.created(URI.create("/api/v1/competencias/" + saved.getId())).body(saved);
     }
 
     @GetMapping("/{id}")
     public Competencia get(@PathVariable Long id) { return service.get(id); }
 
     @PutMapping("/{id}")
-    public Competencia update(@PathVariable Long id, @RequestBody Competencia c) {
+    public Competencia update(@PathVariable Long id, @RequestBody @Valid Competencia c) {
         c.setId(id);
         return service.save(c);
     }
