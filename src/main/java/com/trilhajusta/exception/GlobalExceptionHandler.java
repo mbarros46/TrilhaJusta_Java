@@ -32,9 +32,11 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(err -> messageSource.getMessage(err, locale))
                 .toList();
-        String title = messageSource.getMessage("error.validation.title", null, "Validation failed", locale);
-        ApiError body = new ApiError(Instant.now(), req.getRequestURI(), "VALIDATION_ERROR", title, details);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        String title = messageSource.getMessage("error.validation.title", null, LocaleContextHolder.getLocale());
+        String message = messageSource.getMessage("error.validation", null, LocaleContextHolder.getLocale());
+        ApiError err = new ApiError(Instant.now(), req.getRequestURI(), "VALIDATION_ERROR",
+                message, details);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -56,8 +58,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiError> handleRuntime(RuntimeException ex, HttpServletRequest req) {
         var locale = LocaleContextHolder.getLocale();
-        String title = messageSource.getMessage("error.generic.title", null, "Error", locale);
-        ApiError body = new ApiError(Instant.now(), req.getRequestURI(), "GENERIC_ERROR", title + ": " + ex.getMessage(), List.of());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        String title = messageSource.getMessage("error.generic.title", null, LocaleContextHolder.getLocale());
+        String message = messageSource.getMessage("error.generic", null, ex.getMessage(), LocaleContextHolder.getLocale());
+        ApiError err = new ApiError(Instant.now(), req.getRequestURI(), "ERROR",
+                message, List.of());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 }
