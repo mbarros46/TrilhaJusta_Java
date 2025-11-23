@@ -16,16 +16,16 @@ public class Vaga {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String empresa;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String titulo;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String cidade;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String uf;
 
     @Column(length = 2000)

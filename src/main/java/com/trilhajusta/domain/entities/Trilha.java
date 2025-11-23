@@ -16,7 +16,7 @@ public class Trilha {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String titulo;
 
     private String descricao;

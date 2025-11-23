@@ -13,7 +13,7 @@ public class Competencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     @Column(unique = true)
     private String nome;
 

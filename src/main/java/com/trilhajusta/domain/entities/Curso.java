@@ -17,7 +17,7 @@ public class Curso {
     @JoinColumn(name = "trilha_id")
     private Trilha trilha;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String titulo;
 
     private Integer cargaHoraria;

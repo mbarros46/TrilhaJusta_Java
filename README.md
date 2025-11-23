@@ -93,9 +93,9 @@ Ou:
 
 bash
 Copiar código
-java -jar target/trilhajusta-api.jar
+java -jar target/trilhajusta-api-1.0.0.jar
 📘 Documentação Swagger
-Swagger UI: http://localhost:8080/swagger-ui.html
+Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 OpenAPI JSON: http://localhost:8080/v3/api-docs
 

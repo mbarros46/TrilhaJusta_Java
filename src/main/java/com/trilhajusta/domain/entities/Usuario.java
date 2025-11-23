@@ -19,20 +19,20 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String nome;
 
-    @Email
+    @Email(message = "{validation.email}")
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String passwordHash;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String cidade;
 
-    @NotBlank
+    @NotBlank(message = "{validation.notblank}")
     private String uf;
 
     @Column(nullable = false)

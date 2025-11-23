@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.net.URI;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -36,7 +38,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public Usuario get(@PathVariable Long id) { return repo.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado")); }
+    public Usuario get(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    }
 
     @PutMapping("/{id}")
     public Usuario update(@PathVariable Long id, @RequestBody @Valid Usuario u) { u.setId(id); return repo.save(u); }
@@ -46,16 +50,16 @@ public class UsuarioController {
 
     @PostMapping("/{id}/competencias/{compId}")
     public Usuario addCompetencia(@PathVariable Long id, @PathVariable Long compId) {
-        var u = repo.findById(id).orElseThrow();
-        var c = compRepo.findById(compId).orElseThrow();
+        var u = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        var c = compRepo.findById(compId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Competência não encontrada"));
         u.getCompetencias().add(c);
         return repo.save(u);
     }
 
     @DeleteMapping("/{id}/competencias/{compId}")
     public Usuario removeCompetencia(@PathVariable Long id, @PathVariable Long compId) {
-        var u = repo.findById(id).orElseThrow();
-        var c = compRepo.findById(compId).orElseThrow();
+        var u = repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        var c = compRepo.findById(compId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Competência não encontrada"));
         u.getCompetencias().remove(c);
         return repo.save(u);
     }
