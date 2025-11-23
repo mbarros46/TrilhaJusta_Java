@@ -6,20 +6,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cursos")
+@Table(name = "CURSO")
 @Getter @Setter
 public class Curso {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_curso")
+    @SequenceGenerator(name = "seq_curso", sequenceName = "SEQ_CURSO", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trilha_id")
+    @JoinColumn(name = "TRILHA_ID")
     private Trilha trilha;
 
     @NotBlank(message = "{validation.notblank}")
+    @Column(name = "TITULO")
     private String titulo;
 
-    private Integer cargaHoraria;
+    @Column(name = "DESCRICAO")
     private String provedor;
+
+    @Transient
+    private Integer cargaHoraria;
 }

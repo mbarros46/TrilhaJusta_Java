@@ -6,18 +6,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "competencias")
+@Table(name = "COMPETENCIA")
 @Getter @Setter
 public class Competencia {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_competencia")
+    @SequenceGenerator(name = "seq_competencia", sequenceName = "SEQ_COMPETENCIA", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "{validation.notblank}")
-    @Column(unique = true)
+    @Column(name = "NOME", unique = true)
     private String nome;
 
+    @Column(name = "DESCRICAO")
     private String area;
 
+    @Transient
     private Integer nivelPadrao = 1;
 }

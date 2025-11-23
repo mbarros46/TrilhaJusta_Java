@@ -9,16 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "trilhas")
+@Table(name = "TRILHA")
 @Getter @Setter
 public class Trilha {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_trilha")
+    @SequenceGenerator(name = "seq_trilha", sequenceName = "SEQ_TRILHA", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "{validation.notblank}")
+    @Column(name = "TITULO")
     private String titulo;
 
+    @Column(name = "DESCRICAO")
     private String descricao;
 
     @OneToMany(mappedBy = "trilha", cascade = CascadeType.ALL, orphanRemoval = true)
