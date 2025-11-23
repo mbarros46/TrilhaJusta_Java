@@ -32,6 +32,7 @@ C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\doma
 C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\dto\LoginRequest.java
 C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\TrilhaJustaApplication.java
 C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\messaging\NovaCandidaturaEvent.java
+C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\config\CorsConfig.java
 C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\dto\AtualizarStatusRequest.java
 C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\dto\TokenResponse.java
 C:\Users\migue\Downloads\123\TrilhaJusta_Java\src\main\java\com\trilhajusta\controllers\UsuarioController.java

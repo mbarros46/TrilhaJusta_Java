@@ -12,6 +12,7 @@ com\trilhajusta\domain\entities\Trilha.class
 com\trilhajusta\repositories\VagaRepository.class
 com\trilhajusta\domain\entities\Curso.class
 com\trilhajusta\config\CacheConfig.class
+com\trilhajusta\config\CorsConfig$1.class
 com\trilhajusta\repositories\UsuarioRepository.class
 com\trilhajusta\exception\ApiError.class
 com\trilhajusta\security\jwt\JwtAuthFilter.class
@@ -24,6 +25,7 @@ com\trilhajusta\messaging\NovaCandidaturaListener.class
 com\trilhajusta\domain\entities\Usuario.class
 com\trilhajusta\dto\TokenResponse.class
 com\trilhajusta\services\AiService.class
+com\trilhajusta\config\CorsConfig.class
 com\trilhajusta\services\MatchService.class
 com\trilhajusta\dto\SignupRequest.class
 com\trilhajusta\controllers\CandidaturaController.class
