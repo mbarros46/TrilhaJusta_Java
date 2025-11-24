@@ -1,16 +1,20 @@
-# --- Estágio 1: Build (Compilação) ---
+# --- Estágio 1: Build ---
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . .
-
 RUN mvn clean package -DskipTests
 
-# --- Estágio 2: Run (Execução) ---
-FROM eclipse-temurin:17-jdk
-WORKDIR /app
+# --- Estágio 2: Run ---
+FROM eclipse-temurin:17-jdk-alpine
 
+RUN apk add --no-cache tzdata
+
+ENV TZ=America/Sao_Paulo
+
+WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 ENV PORT=8080
 EXPOSE 8080
-ENTRYPOINT ["java", "-Duser.timezone=America/Sao_Paulo", "-jar", "app.jar"]
+
+ENTRYPOINT ["java", "-Duser.timezone=America/Sao_Paulo", "-Doracle.jdbc.timezoneAsRegion=false", "-jar", "app.jar"]
